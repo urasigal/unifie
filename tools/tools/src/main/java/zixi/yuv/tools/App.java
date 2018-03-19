@@ -34,7 +34,7 @@ public class App
         			    paths.filter(Files::isRegularFile)
         			    	.forEach(fileName -> { 	
         			    		String wholePathString = fileName.toString();
-        			    		String splittedPath[] = wholePathString.split("/");
+        			    		String splittedPath[] = wholePathString.split("\\\\");
         			    		folderFilesNames.add(splittedPath[splittedPath.length-1]);
         			    	});
         			    arrayOfArrayLists.add(folderFilesNames);
@@ -42,7 +42,7 @@ public class App
 				}
         		
         		ArrayList<String> relativeArrayOfFileNames = arrayOfArrayLists.get(0);
-        		ArrayList<String> onlyFilesNames = null;
+        		ArrayList<String> onlyFilesNames = new ArrayList<>();
         		for (int i = 0; i < relativeArrayOfFileNames.size(); i++) {
         			String fileNameTocompare = relativeArrayOfFileNames.get(i);
 					for(int j = 1; j < arrayOfArrayLists.size(); j++)
@@ -53,6 +53,19 @@ public class App
 						}
 					}
 				}
+        		
+        		for(int i = 0; i < arrayOfArrayLists.size(); i++)
+        		{
+        			String longName = arrayOfArrayLists.get(i).get(0);
+        			
+        			int pos = longName.lastIndexOf("\\\\");
+        	        Path path = Paths.get(longName.substring(0, pos) + "\\merged");
+        	        Files.createFile(path);
+        			
+        		}
+        		
+        		
+        		
         		System.out.println("Done");
         	}else throw new Exception("Please provide more than one folder pathes");
         	
