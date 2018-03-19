@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.stream.Stream;
 
 /**
@@ -33,6 +34,7 @@ public class App
         	
         	if(arrFoldersNames.length > 1)
         	{
+        		ArrayList<ArrayList<String>> arrayOfArrayListsOfNeededFileNames = new ArrayList<>();
         		ArrayList<ArrayList<String>> arrayOfArrayLists = new ArrayList<>();
         		for (int i = 0; i < arrFoldersNames.length; i++) {
         			try (Stream<Path> paths = Files.walk(Paths.get(arrFoldersNames[i]))) {
@@ -62,46 +64,51 @@ public class App
         		
         		for(int i = 0; i < arrFoldersNames.length; i++)
         		{
-        			String longName = arrFoldersNames[i];
-        			
-        			int pos = longName.lastIndexOf("\\");
-        	        Path path = Paths.get(longName.substring(0, pos) + "\\merged");
-        	        Files.createFile(path);
-        	        
-        	        OutputStream out = new FileOutputStream(new File(path.toString()), true);
-        	        
+        	        ArrayList<String> dirsFileNames = new ArrayList<>();
         	        try (Stream<Path> paths = Files.walk(Paths.get(arrFoldersNames[i]))) {
         			    paths.filter(Files::isRegularFile)
         			    	.forEach(fileName -> {
         			    		String wholePathString = fileName.toString();
         			    		String splittedPath[] = wholePathString.split("\\\\");
         			    		
-        			    	
         			    		if(onlyFilesNames.contains(splittedPath[splittedPath.length-1]))
         			    		{ 
-        			    			try {
-	        			    			byte[] buf = new byte[1024];
-										InputStream in = new FileInputStream(new File(wholePathString));
-										int b = 0;
-								        while ( (b = in.read(buf)) >= 0) {
-								            out.write(buf, 0, b);
-								            out.flush();
-								        }
-								        out.close();
-								        in.close();
-        			    			} catch (Exception e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
-        			    			// Append to file 
+        			    			dirsFileNames.add(wholePathString);
         			    		}
         			    		
         			    	});
         			} 
-        			
+        	        arrayOfArrayListsOfNeededFileNames.add(dirsFileNames);
         		}
         		
- 
+        		for(int k = 0; k < arrayOfArrayListsOfNeededFileNames.size(); k++)
+        		{
+        			Collections.sort(arrayOfArrayListsOfNeededFileNames.get(k));
+        		}
+        		
+        		
+        		for(int i = 0; i < arrFoldersNames.length; i++)
+        		{
+        			String longName = arrFoldersNames[i];
+        			int pos = longName.lastIndexOf("\\");
+        	        Path path = Paths.get(longName.substring(0, pos) + "\\merged");
+        	        Files.createFile(path);
+        	        
+        	        OutputStream out = new FileOutputStream(new File(path.toString()), true);
+        	        byte[] buf = new byte[1024];
+        	        for(int j = 0; j < arrayOfArrayListsOfNeededFileNames.get(i).size(); j ++ )
+        	        {
+        	        	InputStream in = new FileInputStream(new File(arrayOfArrayListsOfNeededFileNames.get(i).get(j)));
+        	        	int b = 0;
+				        while ( (b = in.read(buf)) >= 0) {
+				            out.write(buf, 0, b);
+				            out.flush();
+				        }
+				        in.close();
+        	        }
+        	        out.close();
+        		}
+        		
         		System.out.println("Done");
         	}else throw new Exception("Please provide more than one folder pathes");
         	
