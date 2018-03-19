@@ -73,7 +73,8 @@ public class App
         			    		
         			    		if(onlyFilesNames.contains(splittedPath[splittedPath.length-1]))
         			    		{ 
-        			    			dirsFileNames.add(wholePathString);
+        			    			if(!(dirsFileNames.contains(wholePathString)))
+        			    				dirsFileNames.add(wholePathString);
         			    		}
         			    		
         			    	});
