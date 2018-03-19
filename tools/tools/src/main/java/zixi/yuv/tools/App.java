@@ -45,7 +45,7 @@ public class App
         		ArrayList<String> onlyFilesNames = null;
         		for (int i = 0; i < relativeArrayOfFileNames.size(); i++) {
         			String fileNameTocompare = relativeArrayOfFileNames.get(i);
-					for(int j = 0; j < arrayOfArrayLists.size(); j++)
+					for(int j = 1; j < arrayOfArrayLists.size(); j++)
 					{
 						if(arrayOfArrayLists.get(j).contains(fileNameTocompare))
 						{
