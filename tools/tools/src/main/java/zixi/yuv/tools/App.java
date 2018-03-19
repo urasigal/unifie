@@ -64,8 +64,7 @@ public class App
         			
         		}
         		
-        		
-        		
+ 
         		System.out.println("Done");
         	}else throw new Exception("Please provide more than one folder pathes");
         	
