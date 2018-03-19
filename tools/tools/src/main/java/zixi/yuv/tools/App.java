@@ -54,9 +54,9 @@ public class App
 					}
 				}
         		
-        		for(int i = 0; i < arrayOfArrayLists.size(); i++)
+        		for(int i = 0; i < arrFoldersNames.length; i++)
         		{
-        			String longName = arrayOfArrayLists.get(i).get(0);
+        			String longName = arrFoldersNames[i];
         			
         			int pos = longName.lastIndexOf("\\\\");
         	        Path path = Paths.get(longName.substring(0, pos) + "\\merged");
