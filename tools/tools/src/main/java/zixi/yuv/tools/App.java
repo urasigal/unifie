@@ -1,8 +1,14 @@
 package zixi.yuv.tools;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -58,9 +64,40 @@ public class App
         		{
         			String longName = arrFoldersNames[i];
         			
-        			int pos = longName.lastIndexOf("\\\\");
+        			int pos = longName.lastIndexOf("\\");
         	        Path path = Paths.get(longName.substring(0, pos) + "\\merged");
         	        Files.createFile(path);
+        	        
+        	        OutputStream out = new FileOutputStream(new File(path.toString()), true);
+        	        
+        	        try (Stream<Path> paths = Files.walk(Paths.get(arrFoldersNames[i]))) {
+        			    paths.filter(Files::isRegularFile)
+        			    	.forEach(fileName -> {
+        			    		String wholePathString = fileName.toString();
+        			    		String splittedPath[] = wholePathString.split("\\\\");
+        			    		
+        			    	
+        			    		if(onlyFilesNames.contains(splittedPath[splittedPath.length-1]))
+        			    		{ 
+        			    			try {
+	        			    			byte[] buf = new byte[1024];
+										InputStream in = new FileInputStream(new File(wholePathString));
+										int b = 0;
+								        while ( (b = in.read(buf)) >= 0) {
+								            out.write(buf, 0, b);
+								            out.flush();
+								        }
+								        out.close();
+								        in.close();
+        			    			} catch (Exception e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+        			    			// Append to file 
+        			    		}
+        			    		
+        			    	});
+        			} 
         			
         		}
         		
