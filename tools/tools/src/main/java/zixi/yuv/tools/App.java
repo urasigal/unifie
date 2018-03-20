@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.stream.Stream;
 
 /**
@@ -88,9 +89,8 @@ public class App
         		
         		for(int k = 0; k < arrayOfArrayListsOfNeededFileNames.size(); k++)
         		{
-        			Collections.sort(arrayOfArrayListsOfNeededFileNames.get(k));
+        			Collections.sort(arrayOfArrayListsOfNeededFileNames.get(k), new OrderByname());
         		}
-        		
         		
         		for(int i = 0; i < arrFoldersNames.length; i++)
         		{
@@ -119,6 +119,25 @@ public class App
         	
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+    
+  //Defining our own Comparator
+    
+    static class OrderByname implements Comparator<String>
+    {
+        @Override
+        public int compare(String s1, String s2)
+        {
+        	String s1EndArr[] = s1.split("\\\\")[s1.split("\\\\").length - 1].split(".");
+        	String s1IntNumber = s1EndArr[0];
+        	int s1Int = Integer.parseInt(s1IntNumber);
+           
+        	String s2EndArr[] = s2.split("\\\\")[s2.split("\\\\").length - 1].split(".");
+        	String s2IntNumber = s2EndArr[0];
+        	int s2Int = Integer.parseInt(s2IntNumber);
+        	
+        	return Integer.compare(s1Int, s2Int);
         }
     }
 }
