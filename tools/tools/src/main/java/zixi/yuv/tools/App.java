@@ -53,12 +53,17 @@ public class App
         		ArrayList<String> onlyFilesNames = new ArrayList<>();
         		for (int i = 0; i < relativeArrayOfFileNames.size(); i++) {
         			String fileNameTocompare = relativeArrayOfFileNames.get(i);
+        			boolean tester = true;
 					for(int j = 1; j < arrayOfArrayLists.size(); j++)
 					{
-						if(arrayOfArrayLists.get(j).contains(fileNameTocompare))
+						if( !( arrayOfArrayLists.get(j).contains(fileNameTocompare) ) )
 						{
-							onlyFilesNames.add(fileNameTocompare);
+							tester = false;
 						}
+					}
+					if(tester)
+					{
+						onlyFilesNames.add(fileNameTocompare);
 					}
 				}
         		
@@ -70,7 +75,6 @@ public class App
         			    	.forEach(fileName -> {
         			    		String wholePathString = fileName.toString();
         			    		String splittedPath[] = wholePathString.split("\\\\");
-        			    		
         			    		if(onlyFilesNames.contains(splittedPath[splittedPath.length-1]))
         			    		{ 
         			    			if(!(dirsFileNames.contains(wholePathString)))
